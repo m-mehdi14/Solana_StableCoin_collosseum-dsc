@@ -1,22 +1,27 @@
 "use client";
 
+import { DashboardLayout } from "@/components/dashboard-layout";
 import CollateralAccountsTable from "@/components/stablecoin/collateral-table";
-import { LiquidationHero } from "@/components/liquidation-hero";
 
 export default function LiquidatePage() {
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <LiquidationHero />
-      
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="animate-fade-in">
-            <CollateralAccountsTable />
-          </div>
+    <DashboardLayout>
+      <div className="space-y-6">
+        {/* Page Header */}
+        <div>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary-orange to-primary-dark bg-clip-text text-transparent">
+            Liquidate
+          </h1>
+          <p className="text-muted-foreground mt-2">
+            View and liquidate unhealthy collateral positions
+          </p>
+        </div>
+
+        {/* Main Content */}
+        <div className="animate-fade-in">
+          <CollateralAccountsTable />
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

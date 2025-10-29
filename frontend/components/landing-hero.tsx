@@ -2,71 +2,64 @@
 
 import { SolanaLogo } from "@/components/ui/solana-logo";
 import Link from "next/link";
+import { Sparkles, Network, TrendingUp, ArrowRight } from "lucide-react";
 
 export function LandingHero() {
   return (
-    <section className="relative overflow-hidden py-20 lg:py-32">
+    <section className="relative overflow-hidden py-16 lg:py-24">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary-orange/10 via-transparent to-primary-dark/10" />
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-orange/20 rounded-full blur-3xl animate-float" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary-dark/20 rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
-      
+
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center max-w-4xl mx-auto">
-          {/* Logo and Title */}
-          <div className="flex justify-center mb-8">
-            <div className="relative">
-              <SolanaLogo className="h-20 w-20 text-primary-orange animate-pulse-glow" />
-              <div className="absolute inset-0 h-20 w-20 bg-primary-orange/20 rounded-full animate-ping" />
+        <div className="text-center max-w-5xl mx-auto">
+          {/* Key Features Badges */}
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary-orange/10 border border-primary-orange/30 backdrop-blur-sm">
+              <Network className="h-4 w-4 text-primary-orange" />
+              <span className="text-sm font-semibold text-primary-orange">CrossChain</span>
+            </div>
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary-dark/10 border border-primary-dark/30 backdrop-blur-sm">
+              <Sparkles className="h-4 w-4 text-primary-dark" />
+              <span className="text-sm font-semibold text-primary-dark">AI-Powered</span>
+            </div>
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/30 backdrop-blur-sm">
+              <TrendingUp className="h-4 w-4 text-green-500" />
+              <span className="text-sm font-semibold text-green-500">Collateral Trading Platform</span>
             </div>
           </div>
-          
-          <h1 className="text-5xl lg:text-7xl font-bold mb-6">
+
+          {/* Logo and Title */}
+          <div className="flex justify-center mb-6">
+            <div className="relative">
+              <SolanaLogo className="h-16 w-16 sm:h-20 sm:w-20 text-primary-orange" />
+              <div className="absolute inset-0 h-16 w-16 sm:h-20 sm:w-20 bg-primary-orange/20 rounded-full animate-ping" />
+            </div>
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4">
             <span className="bg-gradient-to-r from-primary-orange via-white to-primary-dark bg-clip-text text-transparent">
               DSC Protocol
             </span>
           </h1>
-          
-          <p className="text-xl lg:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
-            The most advanced DeFi protocol on Solana. Deposit SOL collateral, mint stablecoins, 
-            and manage your positions with DSC Protocol's real-time price feeds and automated liquidations.
+
+          <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
+            The next-generation <span className="font-semibold text-primary-orange">CrossChain</span>,{" "}
+            <span className="font-semibold text-primary-dark">AI-Powered</span>{" "}
+            <span className="font-semibold text-green-500">Collateral Trading Platform</span>.
+            Trade collateralized positions across multiple blockchains with intelligent automation.
           </p>
-          
-          {/* Feature Highlights */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div className="glass-card p-6 rounded-xl">
-              <div className="text-primary-orange text-3xl mb-3">🔒</div>
-              <h3 className="text-lg font-semibold mb-2">Secure Collateral</h3>
-              <p className="text-sm text-muted-foreground">
-                Deposit SOL as collateral with industry-standard security
-              </p>
-            </div>
-            
-            <div className="glass-card p-6 rounded-xl">
-              <div className="text-primary-dark text-3xl mb-3">💰</div>
-              <h3 className="text-lg font-semibold mb-2">Stable Minting</h3>
-              <p className="text-sm text-muted-foreground">
-                Mint stablecoins backed by real-time price feeds
-              </p>
-            </div>
-            
-            <div className="glass-card p-6 rounded-xl">
-              <div className="text-warning text-3xl mb-3">⚡</div>
-              <h3 className="text-lg font-semibold mb-2">Auto Liquidation</h3>
-              <p className="text-sm text-muted-foreground">
-                Automated liquidation system protects protocol stability
-              </p>
-            </div>
-          </div>
-          
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/dashboard" className="primary-button text-lg px-8 py-4">
+
+          {/* CTA Button */}
+          <div className="flex justify-center">
+            <Link
+              href="/dashboard"
+              className="group inline-flex items-center gap-2 primary-button text-lg px-8 py-4"
+            >
               Launch Dashboard
+              <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <button className="glass-card text-lg px-8 py-4 hover:bg-primary-orange/10 transition-all duration-300">
-              View Documentation
-            </button>
           </div>
         </div>
       </div>

@@ -27,6 +27,11 @@ export function ConfigProvider({ children }: { children: React.ReactNode }) {
   const [config, setConfig] = useState<ConfigAccount | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleAccountChange = (accountInfo: AccountInfo<Buffer>) => {
     try {
@@ -45,10 +50,15 @@ export function ConfigProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
+    if (!mounted || !connection) return;
+
     // Fetch initial account data
     program.account.config
       .fetch(configPDA)
-      .then(setConfig)
+      .then((data) => {
+        setConfig(data);
+        setIsLoading(false);
+      })
       .catch((error) => {
         console.error("Error fetching config account:", error);
         setError("Failed to fetch config account");
@@ -64,7 +74,7 @@ export function ConfigProvider({ children }: { children: React.ReactNode }) {
     return () => {
       connection.removeAccountChangeListener(subscriptionId);
     };
-  }, [connection]);
+  }, [connection, mounted]);
 
   return (
     <ConfigContext.Provider value={{ config, isLoading, error }}>

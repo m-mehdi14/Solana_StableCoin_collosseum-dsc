@@ -1,30 +1,41 @@
 "use client";
 
-import DepositAndWithdraw from "@/components/stablecoin/deposit-withdraw";
-import CollateralAccountDisplay from "@/components/stablecoin/collateral";
-import { DashboardHero } from "@/components/dashboard-hero";
-import { StatsSection } from "@/components/stats-section";
+import { DashboardLayout } from "@/components/dashboard-layout";
+import { DSCOverviewCard } from "@/components/dsc-overview-card";
+import { DashboardStatsOverview } from "@/components/dashboard-stats-overview";
+import { DepositCard } from "@/components/stablecoin/deposit-card";
+import { WithdrawCard } from "@/components/stablecoin/withdraw-card";
+import { TransactionHistory } from "@/components/transaction-history";
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen">
-      {/* Dashboard Hero */}
-      <DashboardHero />
-      
-      {/* Stats Section */}
-      <StatsSection />
-      
-      {/* Main Dashboard Content */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-          <div className="animate-fade-in">
-            <DepositAndWithdraw />
-          </div>
-          <div className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            <CollateralAccountDisplay />
-          </div>
+    <DashboardLayout>
+      <div className="space-y-6">
+        {/* Dashboard Header */}
+        <div className="mb-4">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary-orange to-primary-dark bg-clip-text text-transparent mb-2">
+            Dashboard
+          </h1>
+          <p className="text-muted-foreground">
+            Mint DSC stablecoins by depositing SOL collateral
+          </p>
         </div>
+
+        {/* Big DSC Overview Card */}
+        <DSCOverviewCard />
+
+        {/* Smaller Stats Cards */}
+        <DashboardStatsOverview />
+
+        {/* Deposit and Withdraw Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <DepositCard />
+          <WithdrawCard />
+        </div>
+
+        {/* Transaction History */}
+        <TransactionHistory />
       </div>
-    </div>
+    </DashboardLayout>
   );
 }
