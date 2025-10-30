@@ -156,7 +156,7 @@ export function DSCOverviewCard() {
                                         </TooltipTrigger>
                                         <TooltipContent>
                                             <p className="max-w-xs">
-                                                Health factor measures your position's safety. A value above {minHealthFactor.toFixed(0)} is required. Higher values are safer.
+                                                Health factor measures your position&apos;s safety. A value above {minHealthFactor.toFixed(0)} is required. Higher values are safer.
                                             </p>
                                         </TooltipContent>
                                     </Tooltip>

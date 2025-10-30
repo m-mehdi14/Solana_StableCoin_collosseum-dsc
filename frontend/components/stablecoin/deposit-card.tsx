@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -20,7 +22,7 @@ import { calculateHealthFactor, getUsdValue, BASE_UNIT } from "@/app/utils";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { program } from "@/anchor/setup";
 import { BN } from "@coral-xyz/anchor";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, ComputeBudgetProgram, Transaction } from "@solana/web3.js";
 import { Loader2 } from "lucide-react";
 import { useTransactionToast } from "./toast";
 import InitializeConfig from "./initialize-config";
@@ -142,6 +144,7 @@ export function DepositCard() {
         setError("");
 
         let loadingToastId: string | undefined;
+        let tx: Transaction | null = null;
         try {
             // Show loading toast
             loadingToastId = showLoadingToast("Depositing SOL and minting DSC...");
@@ -150,13 +153,28 @@ export function DepositCard() {
             const mintAmountBN = new BN(mintAmount);
 
             // Create transaction using .transaction() instead of .rpc()
-            const tx = await program.methods
+            tx = await program.methods
                 .depositCollateralAndMint(depositLamports, mintAmountBN)
                 .accounts({
                     depositor: publicKey,
                     priceUpdate: solUsdPriceFeedAccount,
                 })
                 .transaction();
+
+            // Bump compute and ensure recentBlockhash/feePayer set for reliable signing
+            tx.add(
+                ComputeBudgetProgram.setComputeUnitLimit({ units: 400000 }),
+                ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 1 })
+            );
+
+            // Bump compute and ensure recentBlockhash/feePayer set for reliable signing
+            tx.add(
+                ComputeBudgetProgram.setComputeUnitLimit({ units: 400000 }),
+                ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 1 })
+            );
+            tx.feePayer = publicKey;
+            const { blockhash } = await connection.getLatestBlockhash();
+            tx.recentBlockhash = blockhash;
 
             // Update loading message
             dismissToast(loadingToastId);
@@ -190,6 +208,8 @@ export function DepositCard() {
             resetAmounts();
         } catch (err: any) {
             console.error("Error depositing and minting:", err);
+
+            // Do not simulate in showcase mode
 
             // Dismiss loading toast
             dismissToast(loadingToastId);

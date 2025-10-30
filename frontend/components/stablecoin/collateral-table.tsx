@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useMemo, useEffect } from "react";
 import { useCollateral } from "../providers/collateral-account-provider";
 import { usePythPrice } from "../providers/pyth-pricefeed-provider";

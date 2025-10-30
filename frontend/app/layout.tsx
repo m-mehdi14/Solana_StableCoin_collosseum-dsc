@@ -5,8 +5,10 @@ import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { Providers } from "@/components/providers/providers";
+import { SiteHeader } from "@/components/site-header";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   title: "DSC Protocol | DeFi Protocol",
   description: "Advanced collateralized debt position protocol on Solana. Deposit SOL, mint stablecoins, and manage your DeFi positions with real-time price feeds.",
   keywords: ["Solana", "DeFi", "Stablecoin", "Collateral", "Liquidation", "Web3"],
@@ -44,6 +46,7 @@ export default function RootLayout({
             />
 
             <div className="relative z-10">
+              <SiteHeader />
               {children}
             </div>
           </div>

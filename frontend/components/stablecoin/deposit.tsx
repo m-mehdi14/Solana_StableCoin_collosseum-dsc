@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,10 +14,11 @@ import { calculateHealthFactor, getUsdValue, BASE_UNIT } from "@/app/utils";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { program } from "@/anchor/setup";
 import { BN } from "@coral-xyz/anchor";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, PublicKey, SystemProgram } from "@solana/web3.js";
 import { Loader2 } from "lucide-react";
 import { useTransactionToast } from "./toast";
 import InitializeConfig from "./initialize-config";
+import { configPDA } from "@/anchor/setup";
 
 // Helper function to safely convert BN to number
 const bnToNumber = (value: any, defaultValue: number = 0): number => {
@@ -109,6 +112,10 @@ const CollateralMintUI = () => {
       setError("Price feed unavailable. Please try again later.");
       return;
     }
+    if (!solUsdPriceFeedAccount) {
+      setError("Price feed account unavailable. Please refresh and try again.");
+      return;
+    }
 
     if (depositAmount <= 0) {
       setError("Please enter a valid deposit amount");
@@ -140,23 +147,65 @@ const CollateralMintUI = () => {
       const amountCollateral = new BN(depositAmount * LAMPORTS_PER_SOL);
       const amountToMint = new BN(mintAmount);
 
+      // Derive all required accounts explicitly to avoid resolver issues on devnet
+      const [collateralAccount] = PublicKey.findProgramAddressSync(
+        [Buffer.from("collateral"), publicKey.toBuffer()],
+        program.programId
+      );
+      const [solAccount] = PublicKey.findProgramAddressSync(
+        [Buffer.from("sol"), publicKey.toBuffer()],
+        program.programId
+      );
+      const [mintAccount] = PublicKey.findProgramAddressSync(
+        [Buffer.from("mint")],
+        program.programId
+      );
+      const tokenProgram = new PublicKey(
+        "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+      );
+      const associatedTokenProgram = new PublicKey(
+        "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+      );
+      const [tokenAccount] = PublicKey.findProgramAddressSync(
+        [publicKey.toBuffer(), tokenProgram.toBuffer(), mintAccount.toBuffer()],
+        associatedTokenProgram
+      );
+
       console.log("Creating transaction with:", {
         depositAmount: depositAmount,
         mintAmount: mintAmount,
         amountCollateral: amountCollateral.toString(),
         amountToMint: amountToMint.toString(),
         depositor: publicKey.toString(),
-        priceUpdate: solUsdPriceFeedAccount?.toString()
+        priceUpdate: solUsdPriceFeedAccount?.toString(),
+        configAccount: configPDA.toString(),
+        collateralAccount: collateralAccount.toString(),
+        solAccount: solAccount.toString(),
+        mintAccount: mintAccount.toString(),
+        tokenAccount: tokenAccount.toString()
       });
 
       // Create and send transaction directly (no simulation for devnet)
       const tx = await program.methods
         .depositCollateralAndMint(amountCollateral, amountToMint)
-        .accounts({
+        .accountsStrict({
           depositor: publicKey,
+          configAccount: configPDA,
+          collateralAccount,
+          solAccount,
+          mintAccount,
           priceUpdate: solUsdPriceFeedAccount,
+          tokenAccount,
+          tokenProgram,
+          associatedTokenProgram,
+          systemProgram: SystemProgram.programId,
         })
         .transaction();
+
+      // Set payer and blockhash to avoid WalletSendTransactionError in some adapters
+      tx.feePayer = publicKey;
+      const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
+      tx.recentBlockhash = blockhash;
 
       // Send the transaction with devnet-optimized settings
       const transactionSignature = await sendTransaction(tx, connection, {

@@ -1,6 +1,6 @@
 "use client";
 
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import WalletMultiButton from "@/components/wallet-multi-button";
 import { SolanaLogo } from "@/components/ui/solana-logo";
 
 export function SiteHeader() {

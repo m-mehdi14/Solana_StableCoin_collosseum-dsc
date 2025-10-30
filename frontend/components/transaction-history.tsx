@@ -55,11 +55,22 @@ export function TransactionHistory() {
                         const isOurProgram = tx.transaction.message.compiledInstructions.some(
                             (ix) => {
                                 const programIdIndex = ix.programIdIndex;
-                                const accountKeys = tx.transaction.message.accountKeys;
-                                if (accountKeys[programIdIndex]) {
-                                    return accountKeys[programIdIndex].toString() === programId.toString();
+                                const message = tx.transaction.message as any;
+                                let accountKeys: PublicKey[] = [];
+                                if (typeof message.getAccountKeys === 'function') {
+                                    const keys = message.getAccountKeys({
+                                        accountKeysFromLookups: tx.meta?.loadedAddresses,
+                                    });
+                                    accountKeys = [
+                                        ...keys.staticAccountKeys,
+                                        ...(keys.accountKeysFromLookups?.writable ?? []),
+                                        ...(keys.accountKeysFromLookups?.readonly ?? []),
+                                    ];
+                                } else {
+                                    accountKeys = message.accountKeys as PublicKey[];
                                 }
-                                return false;
+                                const key = accountKeys[programIdIndex];
+                                return key ? key.toString() === programId.toString() : false;
                             }
                         );
 

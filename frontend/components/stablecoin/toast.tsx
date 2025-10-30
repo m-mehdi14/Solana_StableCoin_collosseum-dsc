@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
@@ -5,7 +7,7 @@ import { ExternalLink, CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
 // Toast with link to solana explorer transaction
 export const useTransactionToast = () => {
-  const { toast } = useToast();
+  const { toast, dismiss } = useToast();
 
   const showLoadingToast = (message: string = "Processing transaction...") => {
     const { id } = toast({
@@ -69,7 +71,7 @@ export const useTransactionToast = () => {
 
   const dismissToast = (toastId?: string) => {
     if (toastId) {
-      toast.dismiss(toastId);
+      dismiss(toastId);
     }
   };
 

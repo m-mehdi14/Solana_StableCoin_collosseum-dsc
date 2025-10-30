@@ -14,18 +14,18 @@ const bnToNumber = (value: any, defaultValue: number = 0): number => {
 
 export function StatsSection() {
   const { config } = useConfig();
-  const { collateralAccounts } = useCollateral();
-  const { priceFeed } = usePythPrice();
+  const { allCollateralAccounts } = useCollateral();
+  const { solPriceFeed } = usePythPrice();
 
   // Calculate stats
-  const totalCollateralAccounts = collateralAccounts?.length || 0;
-  const totalCollateralValue = collateralAccounts?.reduce((sum, account) => {
-    if (priceFeed) {
+  const totalCollateralAccounts = allCollateralAccounts?.length || 0;
+  const totalCollateralValue = allCollateralAccounts?.reduce((sum, item) => {
+    if (solPriceFeed) {
       try {
-        const price = priceFeed.getPriceNoOlderThan(60);
+        const price = solPriceFeed.getPriceNoOlderThan(60);
         if (price) {
           const priceInUsd = Number(price.price) * Math.pow(10, -6); // Adjust for decimals
-          return sum + (account.lamportBalance * priceInUsd) / 1e9; // Convert lamports to SOL
+          return sum + (item.account.lamportBalance * priceInUsd) / 1e9; // Convert lamports to SOL
         }
       } catch (error) {
         console.error("Error calculating collateral value:", error);
@@ -34,8 +34,8 @@ export function StatsSection() {
     return sum;
   }, 0) || 0;
 
-  const totalMinted = collateralAccounts?.reduce((sum, account) => {
-    return sum + account.amountMinted;
+  const totalMinted = allCollateralAccounts?.reduce((sum, item) => {
+    return sum + item.account.amountMinted;
   }, 0) || 0;
 
   const liquidationThreshold = bnToNumber(config?.liquidationThreshold, 50);
@@ -50,7 +50,8 @@ export function StatsSection() {
     liquidationThreshold: 150
   };
 
-  const stats = [
+  type ChangeType = 'positive' | 'negative' | 'neutral';
+  const stats: { label: string; value: string; change: string; changeType: ChangeType }[] = [
     {
       label: "Total Collateral",
       value: `${isDemoMode ? demoData.totalCollateral : totalCollateralValue.toFixed(2)} SOL`,

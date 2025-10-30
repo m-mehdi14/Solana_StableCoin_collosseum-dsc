@@ -5,7 +5,7 @@ import { DashboardSidebar } from "./dashboard-sidebar";
 import { Menu } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import WalletMultiButton from "@/components/wallet-multi-button";
 import { NetworkSelector } from "./network-selector";
 
 interface DashboardLayoutProps {
@@ -57,9 +57,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
                         <div className="flex items-center gap-3">
                             <NetworkSelector />
-                            <div className="wallet-button-wrapper">
-                                <WalletMultiButton />
-                            </div>
                         </div>
                     </header>
 

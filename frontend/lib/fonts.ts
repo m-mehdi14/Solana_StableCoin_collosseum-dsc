@@ -1,14 +1,10 @@
-import {
-  JetBrains_Mono as FontMono,
-  Inter as FontSans,
-} from "next/font/google";
+// Local shim for fonts to avoid network fetches during build.
+// We rely on Tailwind's `font-sans` and `font-mono` stacks instead.
 
-export const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+export const fontSans = {
+  variable: "",
+};
 
-export const fontMono = FontMono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-});
+export const fontMono = {
+  variable: "",
+};

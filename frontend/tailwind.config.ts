@@ -36,6 +36,10 @@ const config = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          // Custom aliases for gradient usage
+          orange: "#FF6B35",
+          dark: "#FF8C42",
+          light: "#FFA726",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -52,6 +56,9 @@ const config = {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          black: "#1A1A1A",
+          dark: "#0D0D0D",
+          gray: "#2A2A2A",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -62,16 +69,6 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
         // Custom Web3 colors - Black + Orange Theme
-        primary: {
-          orange: "#FF6B35",
-          dark: "#FF8C42",
-          light: "#FFA726",
-        },
-        accent: {
-          black: "#1A1A1A",
-          dark: "#0D0D0D",
-          gray: "#2A2A2A",
-        },
         success: {
           DEFAULT: "#10B981",
           foreground: "#FFFFFF",

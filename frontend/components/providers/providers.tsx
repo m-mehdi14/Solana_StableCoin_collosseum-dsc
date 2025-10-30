@@ -17,7 +17,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
             forcedTheme="dark"
             enableSystem={false}
             disableTransitionOnChange
-            suppressHydrationWarning
         >
             <SolanaWalletProvider>
                 <ConfigProvider>

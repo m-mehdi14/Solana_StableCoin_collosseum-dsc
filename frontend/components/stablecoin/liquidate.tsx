@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -260,7 +262,7 @@ const LiquidateUI: React.FC<LiquidateUIProps> = ({ selectedAccount }) => {
           tokenAccount: liquidatorTokenAccount,
           tokenProgram: new PublicKey("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"), // Token-2022 program
           systemProgram: PublicKey.default,
-        })
+        } as any)
         .transaction();
 
       const transactionSignature = await sendTransaction(tx, connection, {
@@ -370,7 +372,7 @@ const LiquidateUI: React.FC<LiquidateUIProps> = ({ selectedAccount }) => {
             <div className="text-xs text-info/80 space-y-1">
               <div>• You must have stablecoins to burn</div>
               <div>• Account health factor must be &lt; {bnToNumber(config?.minHealthFactor, 1)}</div>
-              <div>• You'll receive SOL + {bnToNumber(config?.liquidationBonus, 10)}% bonus</div>
+              <div>• You&apos;ll receive SOL + {bnToNumber(config?.liquidationBonus, 10)}% bonus</div>
             </div>
           </div>
           <div className="flex flex-col space-y-1.5">

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -80,7 +82,7 @@ const InitializeConfig = () => {
           mintAccount: mintAccount,
           tokenProgram: new PublicKey("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"),
           systemProgram: PublicKey.default,
-        })
+        } as any)
         .transaction();
 
       const transactionSignature = await sendTransaction(tx, connection, {
